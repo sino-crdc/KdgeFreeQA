@@ -27,6 +27,7 @@ Find the file in WeChat for more details.
 
 - [x] [Attention is All You Need](https://arxiv.org/abs/1706.03762)
 - [x] [Weighted Transformer Network for Machine Translation](https://arxiv.org/abs/1711.02132)
+- [x] [Natural Language QA Approaches using Reasoning with External Knowledge](https://arxiv.org/abs/2003.03446)
 
 :sparkles: Zekun Wang
 
