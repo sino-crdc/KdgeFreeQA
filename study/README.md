@@ -56,6 +56,7 @@ Find the file in WeChat for more details.
 - [ ] [SparseBERT: Rethinking the Importance Analysis in Self-attention](https://arxiv.org/abs/2102.12871)
 - [ ] [ERNIE: Enhanced Language Representation with Informative Entities](https://arxiv.org/abs/1905.07129)
 - [ ] [KEPLER: A Unified Model for Knowledge Embedding and Pre-trained Language Representation](https://www.researchgate.net/publication/350418783_KEPLER_A_Unified_Model_for_Knowledge_Embedding_and_Pre-trained_Language_Representation)
+- [ ] [TransE: Translating Embeddings for Modeling Multi-relational Data](https://proceedings.neurips.cc/paper/2013/file/1cecc7a77928ca8133fa24680a88d2f9-Paper.pdf)
 
 ### Code Learning
 
@@ -79,6 +80,7 @@ Find the file in WeChat for more details.
 - [ ] [transformer](https://github.com/jayparks/transformer)
 - [ ] ERNIE
 - [ ] KEPLER
+- [ ] [TransE](https://github.com/zqhead/TransE)
 
 ### Code Practice
 to be continued...
