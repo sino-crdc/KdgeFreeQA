@@ -83,6 +83,7 @@ Find the file in WeChat for more details.
 - [ ] ERNIE
 - [ ] KEPLER
 - [ ] [TransE](https://github.com/zqhead/TransE)
+- [ ] [Knowledge Graph-Augmented Abstractive Summarization with Semantic-Driven Cloze Reward](https://arxiv.org/abs/2005.01159)
 
 ### Code Practice
 to be continued...
