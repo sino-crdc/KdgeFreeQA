@@ -43,6 +43,7 @@ Find the file in WeChat for more details.
 - [x] [How Additional Knowledge can Improve Natural Language Commonsense Question Answering?](https://arxiv.org/abs/1909.08855)
 - [ ] [KEPLER: A Unified Model for Knowledge Embedding and Pre-trained Language Representation](https://www.researchgate.net/publication/350418783_KEPLER_A_Unified_Model_for_Knowledge_Embedding_and_Pre-trained_Language_Representation)
 - [ ] [K-ADAPTER: Infusing Knowledge into Pre-Trained Models with Adapters](https://arxiv.org/abs/2002.01808)
+- [ ] [Graph2Seq: Graph to Sequence Learning with Attention-based Neural Networks](https://arxiv.org/abs/1804.00823)
 
 :sparkles: Yakun Hou
 
@@ -69,6 +70,7 @@ Find the file in WeChat for more details.
 
 - [ ] [BERT](https://github.com/jcyk/BERT)
 - [ ] K-ADAPTER
+- [ ] [Graph2Seq](https://github.com/graph4ai/graph4nlp/blob/master/graph4nlp/pytorch/models/graph2seq.py)
 
 :sparkles: Yakun Hou
 
