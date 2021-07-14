@@ -43,11 +43,13 @@ Find the file in WeChat for more details.
 - [x] [How Additional Knowledge can Improve Natural Language Commonsense Question Answering?](https://arxiv.org/abs/1909.08855)
 - [ ] [KEPLER: A Unified Model for Knowledge Embedding and Pre-trained Language Representation](https://www.researchgate.net/publication/350418783_KEPLER_A_Unified_Model_for_Knowledge_Embedding_and_Pre-trained_Language_Representation)
 - [ ] [K-ADAPTER: Infusing Knowledge into Pre-Trained Models with Adapters](https://arxiv.org/abs/2002.01808)
+- [ ] [Graph2Seq: Graph to Sequence Learning with Attention-based Neural Networks](https://arxiv.org/abs/1804.00823)
 
 :sparkles: Yakun Hou
 
 - [x] [RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/pdf/1907.11692.pdf)
 - [x] [SeqGAN: Sequence Generative Adversarial Nets with Policy Gradient](https://arxiv.org/abs/1609.05473)
+- [ ] [PostKS: Learning to Select Knowledge for Response Generation in Dialog Systems](https://arxiv.org/pdf/1902.04911.pdf)
 
 :sparkles: Yibo Zhang
 
@@ -55,6 +57,8 @@ Find the file in WeChat for more details.
 - [ ] [SparseBERT: Rethinking the Importance Analysis in Self-attention](https://arxiv.org/abs/2102.12871)
 - [ ] [ERNIE: Enhanced Language Representation with Informative Entities](https://arxiv.org/abs/1905.07129)
 - [ ] [KEPLER: A Unified Model for Knowledge Embedding and Pre-trained Language Representation](https://www.researchgate.net/publication/350418783_KEPLER_A_Unified_Model_for_Knowledge_Embedding_and_Pre-trained_Language_Representation)
+- [ ] [TransE: Translating Embeddings for Modeling Multi-relational Data](https://proceedings.neurips.cc/paper/2013/file/1cecc7a77928ca8133fa24680a88d2f9-Paper.pdf)
+- [ ] [Knowledge Graph-Augmented Abstractive Summarization with Semantic-Driven Cloze Reward](https://arxiv.org/abs/2005.01159)
 
 ### Code Learning
 
@@ -67,16 +71,19 @@ Find the file in WeChat for more details.
 
 - [ ] [BERT](https://github.com/jcyk/BERT)
 - [ ] K-ADAPTER
+- [ ] [Graph2Seq](https://github.com/graph4ai/graph4nlp/blob/master/graph4nlp/pytorch/models/graph2seq.py)
 
 :sparkles: Yakun Hou
 
 - [ ] RepMLP
+- [ ] [PostKS](https://github.com/bzantium/Posterior-Knowledge-Selection)
 
 :sparkles: Yibo Zhang
 
 - [ ] [transformer](https://github.com/jayparks/transformer)
 - [ ] ERNIE
 - [ ] KEPLER
+- [ ] [TransE](https://github.com/zqhead/TransE)
 
 ### Code Practice
 to be continued...
