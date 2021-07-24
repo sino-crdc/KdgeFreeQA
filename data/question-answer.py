@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-import json
+import simplejson as json
 dict1a={}
 dict1b={}
 dict2a={}
