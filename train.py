@@ -13,4 +13,5 @@ def main():
 if __name__ == '__main__':
     # parse command config, c.f. [argparse](https://zhuanlan.zhihu.com/p/56922793)
     main()
+    print('hello world')
 

@@ -13,7 +13,7 @@ def generate_vocab(filepath):
 '''
 def word_to_idx(example, word2idx):
     # according to word2idx, transfer example to numerical form.
-    pass # return text
+    pass # return array
 
 '''
 @author: Yakun

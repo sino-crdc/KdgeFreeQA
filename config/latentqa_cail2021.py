@@ -62,5 +62,4 @@ test_cfg = dict(
     bbox_type='poly',
     result_path='outputs/submit_ctw/'
 )
-
 '''
