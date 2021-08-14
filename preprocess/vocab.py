@@ -1,7 +1,9 @@
 '''
 @author: Yakun
+generate vocab.txt
 '''
 import jieba
+
 
 train_path = r'C:\pythonProject1\KdgeFreeQA\dataset\final_all_data\first_stage\question-answer-train.json'
 test_path = r'C:\pythonProject1\KdgeFreeQA\dataset\final_all_data\first_stage\question-answer-test.json'
@@ -31,7 +33,6 @@ def generate_vocab(input_file, output_file):  # generate lists with each word
                         vocabulary[word] = 1
         print("vocabulary: {}".format(vocabulary))
         vocabulary_list = sorted(vocabulary, key=vocabulary.get, reverse=True)
-
         print("vocabulary list: {}".format(vocabulary_list))
         print(input_file + " 词汇表大小:", len(vocabulary_list))
         with open(output_file, "w", encoding='utf-8') as ff:
