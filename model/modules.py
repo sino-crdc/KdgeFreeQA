@@ -1,6 +1,6 @@
+import torch
+import torch.nn as nn
 
-def attention_distribution():
-    pass
 
 
 def context_vector():

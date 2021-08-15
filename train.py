@@ -4,7 +4,6 @@ import torch
 from data.dataloader import get_train_loader
 
 
-
 DEVICE = torch.device('cuda') if config.train_cfg['use_gpu'] is True and torch.cuda.is_available() else 'cpu'
 
 
@@ -13,7 +12,11 @@ def loss():
 
 
 def train(dataloader):
-    pass
+    print('training : get data from dataloader')
+    for cases, questions, lengths_case, lengths_question, cases_pad_mask, questions_pad_mask in dataloader:
+        pass
+
+
 
 
 def main(bqa_train_path, batch_size, *args, **kwargs):
