@@ -99,7 +99,7 @@ def get_train_loader(bqa_train_path, batch_size):
         cases = pad_sequence(cases, batch_first=config.train_cfg['batch_first'], padding_value=PAD)
         questions = pad_sequence(questions, batch_first=config.train_cfg['batch_first'], padding_value=PAD)
         #  we return a mask (cases != PAD), which masks the pads(=False), for question, too
-        return cases, questions, lengths_case, lengths_question, cases != PAD, questions != PAD,
+        return cases, questions, lengths_case, lengths_question, cases != PAD, questions != PAD, examples
 
     'define dataset and dataloader'
     print('registering dataset')

@@ -13,12 +13,6 @@ dim = config.train_cfg['glove_dim']
 ltp = LTP(config.train_cfg['LTP_config'])
 
 
-def convert_to_one_hot(num, dim):
-    onehot = [0 for i in range(dim)]
-    onehot[num] = 1
-    return onehot
-
-
 def init_tokenizer(vocab):
     if vocab is not None:
         ltp.init_dict(vocab, max_window=4)

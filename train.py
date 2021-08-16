@@ -13,7 +13,7 @@ def loss():
 
 def train(dataloader):
     print('training : get data from dataloader')
-    for cases, questions, lengths_case, lengths_question, cases_pad_mask, questions_pad_mask in dataloader:
+    for cases, questions, lengths_case, lengths_question, cases_pad_mask, questions_pad_mask, examples in dataloader:
         pass
 
 
@@ -25,6 +25,8 @@ def main(bqa_train_path, batch_size, *args, **kwargs):
 
 
 if __name__ == '__main__':
+    # todo : optimization : config file can only be assigned in this main function, the others get the config as a parameter
+    # todo : like this : main(cfgs, bqa_train_path, batch_size), etc.
     # parse command config, c.f. [argparse](https://zhuanlan.zhihu.com/p/56922793)
     bqa_train_path = config.train_cfg['bqa_train_path']
     batch_size = config.train_cfg['batch_size']

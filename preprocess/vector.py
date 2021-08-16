@@ -45,7 +45,7 @@ def load_vectors(path_to_vector):
             count = 0
             for line in tqdm(f.readlines()):
                 count = count + 1
-                if count == 10: # todo : we load 10 vectors for debugging.
+                if count == 10:  # todo : we load 10 vectors for debugging.
                     break
                 items = line.split(' ')
                 key = items[0]

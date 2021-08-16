@@ -2,7 +2,12 @@ model_cfg = {
     'embedding_dim': 100,  # if use GloVe, please make sure this equals to train_cfg['glove_dim']
     'encoder_dim': 256,
     'decoder_dim': 256,
-    'num_encoder_layers' : 1
+    'num_encoder_layers': 1,
+    'num_decoder_layers': 1,
+    'latent_dim': 100,  # dimension of latent Representation
+    'num_dist_word_selected': 3,
+    'temperature_initial': 1e-3
+    
 }
 
 
@@ -18,9 +23,9 @@ train_cfg = {
     'batch_size' : 16,
     'use_gpu': True,
     'use_char': False,
-    'vocab_char_path': r'./asset/vocab.txt',  # Yakun has generate char table.
+    'vocab_char_path': None,
     'vector_char_path': None,
-    'vocab_word_path': None,
+    'vocab_word_path': r'../asset/zhs_wiki_vocab.txt',
     'vector_word_path': r'./asset/zhs_wiki_glove.vectors.100d.txt.txt',
     'LTP_config': 'small',
     'max_length': 512,
