@@ -131,7 +131,9 @@ dmypy.json
 # PyCharm
 .idea/
 
-# dataset
+# misc
 asset/case/
 asset/law/
 asset/question_answer_background/
+asset/zhs_wiki_glove.vectors.100d.txt.txt
+default.py

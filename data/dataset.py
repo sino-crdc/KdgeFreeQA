@@ -1,25 +1,23 @@
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
-'''
-@author Yakun, Zhaoze
-'''
+import json
+import sys
+from tqdm import tqdm
 
 
 class bqaDataset(Dataset):
-    # extract one batch
-    pass
+    def __init__(self, cases, questions):
+        self.cases = cases  # self.cases with judgements
+        self.questions = questions  # questions aligned with cases
 
 
-class bqDataset(Dataset):
-    # extract one batch
-    pass
+    def __getitem__(self, index):
+        return {'case': self.cases[index],
+                'question': self.questions[index]}
+
+    def __len__(self):
+        return len(self.cases)
 
 
 class bqakDataset(Dataset):
-    # extract one batch
-    pass
-
-
-class bqkDataset(Dataset):
-    # extract one batch
     pass

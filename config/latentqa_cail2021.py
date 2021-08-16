@@ -1,65 +1,36 @@
-# below is a configuration setting example for PANpp (not our model)
-'''
-# note: method to define configuration : .conf/.sh/.yaml/dict of .py
-model = dict(
-    type='PAN',
-    backbone=dict(
-        type='resnet18',
-        pretrained=True
-    ),
-    neck=dict(
-        type='FPEM_v1',
-        in_channels=(64, 128, 256, 512),
-        out_channels=128
-    ),
-    detection_head=dict(
-        type='PA_Head',
-        in_channels=512,
-        hidden_dim=128,
-        num_classes=6,
-        loss_text=dict(
-            type='DiceLoss',
-            loss_weight=1.0
-        ),
-        loss_kernel=dict(
-            type='DiceLoss',
-            loss_weight=0.5
-        ),
-        loss_emb=dict(
-            type='EmbLoss_v1',
-            feature_dim=4,
-            loss_weight=0.25
-        )
-    )
-)
-data = dict(
-    batch_size=16,
-    train=dict(
-        type='PAN_CTW',
-        split='train',
-        is_transform=True,
-        img_size=640,
-        short_size=640,
-        kernel_scale=0.7,
-        read_type='cv2'
-    ),
-    test=dict(
-        type='PAN_CTW',
-        split='test',
-        short_size=640,
-        read_type='cv2'
-    )
-)
-train_cfg = dict(
-    lr=1e-3,
-    schedule='polylr',
-    epoch=600,
-    optimizer='Adam'
-)
-test_cfg = dict(
-    min_score=0.88,
-    min_area=16,
-    bbox_type='poly',
-    result_path='outputs/submit_ctw/'
-)
-'''
+model_cfg = {
+    'embedding_dim': 100,  # if use GloVe, please make sure this equals to train_cfg['glove_dim']
+    'encoder_dim': 256,
+    'decoder_dim': 256,
+    'num_encoder_layers': 1,
+    'num_decoder_layers': 1,
+    'latent_dim': 100,  # dimension of latent Representation
+    'num_dist_word_selected': 3,
+    'temperature_initial': 1e-3
+    
+}
+
+
+train_cfg = {
+    # 'case_train_path': r'/data/wangzekun/KQA/case/train.json',
+    # 'case_test_path': r'/data/wangzekun/KQA/case/test.json',
+    # 'bqa_train_path': r'/data/wangzekun/KQA/question_answer_background/question-answer-train.json',
+    # 'bqa_test_path': r'/data/wangzekun/KQA/question_answer_background/question-answer-test.json',
+    'case_train_path': r'./asset/case/train.json',
+    'case_test_path': r'./asset/case/test.json',
+    'bqa_train_path': r'./asset/question_answer_background/question-answer-train.json',
+    'bqa_test_path': r'./asset/question_answer_background/question-answer-test.json',
+    'batch_size' : 16,
+    'use_gpu': True,
+    'use_char': False,
+    'vocab_char_path': None,
+    'vector_char_path': None,
+    'vocab_word_path': r'../asset/zhs_wiki_vocab.txt',
+    'vector_word_path': r'./asset/zhs_wiki_glove.vectors.100d.txt.txt',
+    'LTP_config': 'small',
+    'max_length': 512,
+    'batch_first': True,
+    'glove_dim': 100,
+    'is_train_tokenized': False,
+    'tokenized_train_path': r'./asset/question_answer_background/tok-question-answer-train.json-answer-train.json',
+}

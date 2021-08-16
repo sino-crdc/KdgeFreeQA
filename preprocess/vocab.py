@@ -1,24 +1,38 @@
+import config.latentqa_cail2021 as config
 
-'''
-@author: Yakun
-'''
-def generate_vocab(filepath):
-    # generate vocabulary file:
-    # arrange the words that appear in the dataset in order of their frequency.
-    # you can save the filepath in config/latentqa_cail2021.py by adding another dict
-    pass # return vocab.txt and save it, word2idx(dict), idx2word(array), counter or num_vocab
+def word2idx(path_to_vocab):
+    """
+    :param path_to_vocab:
+    :return: a dict
+    """
+    words = []
+    word2idx = {}
+    with open(path_to_vocab, 'r', encoding='utf-8') as f:
+        words = f.readlines()
+    for i, word in enumerate(words):
+        word2idx[word.strip()] = i
+    return word2idx
 
-'''
-@author: Yakun
-'''
-def word_to_idx(example, word2idx):
-    # according to word2idx, transfer example to numerical form.
-    pass # return array
 
-'''
-@author: Yakun
-'''
-def idx_to_word(example, idx2word):
-    # according to idx2word, transfer example to textual form.
-    pass # return text
+def idx2word(path_to_vocab):
+    """
+    :param path_to_vocab:
+    :return: a list
+    """
+    with open(path_to_vocab, 'r', encoding='utf-8') as f:
+        words = f.readlines()
+    for i, word in enumerate(words):
+        words[i] = word.strip()
+    return words
 
+
+def text_to_idx(example, word2idx):
+    return [word2idx[word] for word in example]
+
+
+def idx_to_text(example, idx2word):
+    return [idx2word[idx] for idx in example]
+
+
+def idx_to_onehot(example, dim):
+    return [[0 if i != idx else 1 for i in range(dim)] for idx in example]
