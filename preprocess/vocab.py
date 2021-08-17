@@ -1,6 +1,6 @@
-import config.latentqa_cail2021 as config
 
-def word2idx(path_to_vocab):
+
+def word2idx(path_to_vocab, vocab_size):
     """
     :param path_to_vocab:
     :return: a dict
@@ -10,11 +10,13 @@ def word2idx(path_to_vocab):
     with open(path_to_vocab, 'r', encoding='utf-8') as f:
         words = f.readlines()
     for i, word in enumerate(words):
+        if i == vocab_size:
+            break
         word2idx[word.strip()] = i
     return word2idx
 
 
-def idx2word(path_to_vocab):
+def idx2word(path_to_vocab, vocab_size):
     """
     :param path_to_vocab:
     :return: a list
@@ -22,6 +24,8 @@ def idx2word(path_to_vocab):
     with open(path_to_vocab, 'r', encoding='utf-8') as f:
         words = f.readlines()
     for i, word in enumerate(words):
+        if i == vocab_size:
+            break
         words[i] = word.strip()
     return words
 

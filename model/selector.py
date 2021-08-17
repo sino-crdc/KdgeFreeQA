@@ -1,24 +1,30 @@
 import torch.nn as nn
 import torch
-import config.latentqa_cail2021 as config
 import sys
 from preprocess.vocab import text_to_idx, idx_to_onehot
 import numpy as np
 
 
 class Selector(nn.Module):
-    def __init__(self, idx2word, word2idx, mode='gaussian', config=config.model_cfg):
+    def __init__(self, idx2word, word2idx, latent_dim, num_dist_word_selected, temperature_initial, mode='gaussian', batch_first=True):
         """
-         stochastic selector network
+        stochastic selector network
         :param idx2word: an array.
+        :param word2idx: a dict.
+        :param latent_dim: latent representation dimension.
+        :param num_dist_word_selected: the number of distributions which a new word is selected from.
+        :param temperature_initial: initial temperature for continuous softmax function (in place of argmax) in Gumbel-Max trick for inference of discrete latent variable.
         :param mode: parameterized distribution for latent representation.
-        :param config: model configuration (hyperparameters).
+        :param batch_first
         """
         super(Selector, self).__init__()
         self.idx2word = idx2word
         self.word2idx = word2idx
         self.mode = mode
-        self.config = config # todo : the other layers need to make config as an attribute, too.
+        self.latent_dim = latent_dim
+        self.num_dist_word_selected = num_dist_word_selected
+        self.temperature_initial = temperature_initial
+        self.batch_first = batch_first
 
     def vocab_dist(self, context_q, context_c, decoded):
         """
@@ -41,8 +47,8 @@ class Selector(nn.Module):
         :return: latent representation h, [bsz, s_len, latent_dim]
         """
         concatenated = torch.cat([context_q, context_c, decoded, cq], dim=2)
-        mu = torch.tanh(nn.Linear(concatenated.shape[2], self.config['latent_dim'], bias=False)(concatenated))
-        sigma = torch.exp(torch.tanh(nn.Linear(concatenated.shape[2], self.config['latent_dim'], bias=False)(concatenated))) # todo : non-stability catastrophe
+        mu = torch.tanh(nn.Linear(concatenated.shape[2], self.latent_dim, bias=False)(concatenated))
+        sigma = torch.exp(torch.tanh(nn.Linear(concatenated.shape[2], self.latent_dim, bias=False)(concatenated))) # todo : non-stability catastrophe
         if self.mode == 'gaussian':
             # return torch.distributions.MultivariateNormal(mu, torch.pow(sigma, 2)).sample()
             # epsilon = torch.distributions.MultivariateNormal(torch.zeros_like(mu), torch.ones_like(sigma)).sample()
@@ -62,7 +68,7 @@ class Selector(nn.Module):
         :param num_step: please see forward()
         :return: estimator (one-hot) for latent variable, [bsz, s_len, num_dist_word_selected]
         """
-        logits = nn.Linear(h.shape[2], self.config['num_dist_word_selected'])(h)
+        logits = nn.Linear(h.shape[2], self.num_dist_word_selected)(h)
         pi = nn.Softmax(dim=2)(logits)
         gumbel = torch.distributions.gumbel.Gumbel(torch.tensor([[[0.0 for k in range(pi.shape[2])]
                                                                   for j in range(pi.shape[1])]
@@ -72,7 +78,7 @@ class Selector(nn.Module):
                                                                  for i in range(pi.shape[0])])).sample()
         gplogpi = gumbel + torch.log(pi)
         # with temperature approaches zero, estimator becomes an one-hot vector (Gumbel-Max trick).
-        estimator = nn.Softmax(dim=2)(gplogpi/(self.config['temperature_initial']/num_step))
+        estimator = nn.Softmax(dim=2)(gplogpi/(self.temperature_initial/num_step))
         return estimator
 
 
@@ -87,7 +93,7 @@ class Selector(nn.Module):
         :param examples: please see forward()
         :return: probs, [bsz, s_len, vocab_size] # todo : in the formula, we get probs for word t+1 through information from word t (t: index of answer), but this realization is not t+1 but t.
         """
-        assert(self.config['num_dist_word_selected'] == 3)
+        assert(self.num_dist_word_selected == 3)
         splitted_att_c = torch.split(att_c, 1, dim=0)
         splitted_att_q = torch.split(att_q, 1, dim=0)
         splitted_vocab_dist = torch.split(vocab_dist, 1, dim=0)
