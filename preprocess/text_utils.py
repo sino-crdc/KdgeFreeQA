@@ -1,6 +1,9 @@
+#coding:utf-8
 from ltp import LTP
 from config import latentqa_cail2021 as config
 from torch.nn.utils.rnn import pad_sequence
+import jieba
+import time
 
 # special tokens in str form.
 pad_token = "<pad>"
@@ -8,22 +11,44 @@ unk_token = "<unk>"
 bos_token = "<bos>"
 eos_token = "<eos>"
 
+# todo : how to delete the config, we want to import config only in train/etc. files.
+
 dim = config.train_cfg['glove_dim']
 
-ltp = LTP(config.train_cfg['LTP_config'])
+tokenizer = None
+if config.train_cfg['tokenizer'] == 'ltp':
+    tokenizer = LTP(config.train_cfg['LTP_config'])
+else:  # config.train_cfg['tokenizer'] == 'jieba'
+    tokenizer = jieba
 
 
 def init_tokenizer(vocab):
+    global tokenizer
     if vocab is not None:
-        ltp.init_dict(vocab, max_window=4)
+        print('initialize tokenizer')
+        if config.train_cfg['tokenizer'] == 'ltp':
+            tokenizer.init_dict(vocab, max_window=4)
+        else: # config.train_cfg['tokenizer'] == 'jieba'
+            tokenizer.load_userdict(vocab)
 
 
 def word_seg(text):
-    if text is list:
-        segment = ltp.seg(text)[0]
-    else:
-        segment = ltp.seg([text])[0]
-    return segment[0]
+    global tokenizer
+    if config.train_cfg['tokenizer'] == 'ltp':
+        if text is list:
+            segment = tokenizer.seg(text)[0][0]
+        else:
+            segment = tokenizer.seg([text])[0][0]
+    else: # config.train_cfg['tokenizer'] == 'jieba'
+        if text is list:
+            segment = list(tokenizer.cut(text[0]))
+        else:
+            segment = list(tokenizer.cut(text))
+    return segment
+
+
+def convert_to_one_hot(num, dim):
+    return [0 if i != num else 1 for i in range(dim)]
 
 
 # special tokens in 100d form.
