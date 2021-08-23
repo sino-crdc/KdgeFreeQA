@@ -1,10 +1,13 @@
+# coding: utf-8
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import json
 import sys
+reload(sys)
 from tqdm import tqdm
 from preprocess.text_utils import init_tokenizer, word_seg
 
+sys.setdefaultencoding('utf-8')
 # what is 'all data from here' and 'one data from here'
 # - 'all data from here': we load all of the data when construct cqaDataset object, that is to say, we store all the data all the time.
 # - 'one data from here': we just load one data (of index 'index of __getitem__') from file, we don't need to store all the data but the file path.
@@ -19,11 +22,11 @@ class cqaDataset(Dataset):
         questions = []
         with open(self.train_cfg['cqa_train_path'], 'r', encoding='utf-8') as f:
             print('read data from ' + self.train_cfg['cqa_train_path'])
-            count = 0  # the following loop is too long, for quick debug, we only use some samples for trial.
+            # count = 0  # the following loop is too long, for quick debug, we only use some samples for trial.
             for line in tqdm(f.readlines()):
-                count += 1
-                if count == 100:  # todo : we load 100 cases for debugging.
-                    break
+                # count += 1
+                # if count == 100:  # todo : we load 100 cases for debugging.
+                #     break
                 line = line[1:-2]
                 case = []
                 question = []

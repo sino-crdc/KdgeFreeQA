@@ -45,21 +45,32 @@ class Selector(nn.Module):
         :param decoded: please see forward()
         :param cq: please see forward()
         :return: latent representation h, [bsz, s_len, latent_dim]
+        :return: v, [bsz, s_len, 2xencoder_hidden_dim + 2xencoder_hidden_dim + decoder_hidden_dim + embedding_dim]
+        :return: h_dist, distribution of latent representation
         """
-        concatenated = torch.cat([context_q, context_c, decoded, cq], dim=2)
-        mu = torch.tanh(nn.Linear(concatenated.shape[2], self.latent_dim, bias=False)(concatenated))
-        sigma = torch.exp(torch.tanh(nn.Linear(concatenated.shape[2], self.latent_dim, bias=False)(concatenated))) # todo : non-stability catastrophe
+        v = torch.cat([context_q, context_c, decoded, cq], dim=2)
+        mu = torch.tanh(nn.Linear(v.shape[2], self.latent_dim, bias=False)(v))
+        sigma = torch.exp(torch.tanh(nn.Linear(v.shape[2], self.latent_dim, bias=False)(v))) # todo : non-stability catastrophe
+        variance = torch.diag(sigma ** 2)
         if self.mode == 'gaussian':
-            # return torch.distributions.MultivariateNormal(mu, torch.pow(sigma, 2)).sample()
-            # epsilon = torch.distributions.MultivariateNormal(torch.zeros_like(mu), torch.ones_like(sigma)).sample()
-            stack = []
-            for i in range(mu.shape[0]):
-                sub_stack = []
-                for j in range(mu.shape[1]):
-                    sub_stack.append(torch.distributions.MultivariateNormal(torch.zeros(mu.shape[2]), torch.eye(mu.shape[2])).sample())
-                stack.append(torch.stack(sub_stack, dim=0))
-            epsilon = torch.stack(stack, dim=0)
-            return mu + sigma * epsilon
+            h_dist = torch.distributions.MultivariateNormal(mu, variance)
+            # todo : this epsilon is changed but not debugged yet, please pay attention
+            epsilon = torch.distributions.MultivariateNormal(torch.zeros(mu.shape), torch.eye(mu.shape[2]).expand([mu.shape[0], mu.shape[1], mu.shape[2], mu.shape[2]])).sample()
+        # todo : and attention please, in training phase, we need Q_phi as distribution, so this distribution is for testing phase, because we have KL-divergence of both two in the loss, so this distribution is also optimized, don't worry.
+        # if self.mode == 'gaussian':
+        #     # return torch.distributions.MultivariateNormal(mu, torch.pow(sigma, 2)).sample()
+        #     # epsilon = torch.distributions.MultivariateNormal(torch.zeros_like(mu), torch.ones_like(sigma)).sample()
+        #     stack = []
+        #     for i in range(mu.shape[0]):
+        #         sub_stack = []
+        #         for j in range(mu.shape[1]):
+        #             sub_stack.append(torch.distributions.MultivariateNormal(torch.zeros(mu.shape[2]), torch.eye(mu.shape[2])).sample())
+        #         stack.append(torch.stack(sub_stack, dim=0))
+        #     epsilon = torch.stack(stack, dim=0)
+            #  todo : we can use this reparameterization trick for variational Bayesian methods here ? or rather just in the loss (lower bound) ?
+
+            # very perspicuous reparameterization trick to solve auto-gradient problem of sampling : convert N(mu, sigma**2).sample to mu+sigma*epsilon, which is also expectation
+            return mu + sigma * epsilon, v, h_dist
 
 
     def latent_variable(self, h, num_step):
@@ -70,6 +81,7 @@ class Selector(nn.Module):
         """
         logits = nn.Linear(h.shape[2], self.num_dist_word_selected)(h)
         pi = nn.Softmax(dim=2)(logits)
+        # todo : can we treat this by batch
         gumbel = torch.distributions.gumbel.Gumbel(torch.tensor([[[0.0 for k in range(pi.shape[2])]
                                                                   for j in range(pi.shape[1])]
                                                                  for i in range(pi.shape[0])]),
@@ -128,8 +140,6 @@ class Selector(nn.Module):
         return torch.stack(stack, dim=0)  # [bsz, s_len, vocab_size]
 
 
-
-
     def forward(self, cq, att_c, att_q, context_c, context_q, decoded, examples, num_step):
         """
         :param cq : concatenation of cases and questions (vector form, NOT encoded form), todo : may be replaced by answer in training phase
@@ -140,12 +150,15 @@ class Selector(nn.Module):
         :param decoded: decoded state.
         :param examples: this batch of original tokenized cases and questions in str.
         :param num_step: which traning step.
-        :return: probs, [bsz, s_len, vocab_size], then we can use this to generate answer! (either in a greedy way or in a beam search way)
+        :return: probs: [bsz, s_len, vocab_size], then we can use this to generate answer! (either in a greedy way or in a beam search way)
+        :return: h: [bsz, s_len, latent_dim]
+        :return: v: [bsz, s_len, 2xencoder_hidden_dim + 2xencoder_hidden_dim + decoder_hidden_dim + embedding_dim]
+        :return: h_dist, distribution of latent representation
         """
         vocab_dist = self.vocab_dist(context_q, context_c, decoded)
-        h = self.latent_representation(context_q, context_c, decoded, cq)
+        h, v, h_dist = self.latent_representation(context_q, context_c, decoded, cq)
         estimator = self.latent_variable(h, num_step)
         probs = self.word_selection(att_c, att_q, vocab_dist, estimator, examples)
-        return probs
+        return probs, h, v, h_dist, att_c, att_q, vocab_dist
 
 

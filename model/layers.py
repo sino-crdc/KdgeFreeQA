@@ -94,6 +94,7 @@ class AttentionLayer(nn.Module):
         questions = self.wq(questions)
         decoded = self.uc(decoded)
         decodeds = torch.split(decoded, 1, dim=1)
+        # todo : can we treat this by batch ?
         stack_c = []
         stack_q = []
         for each in decodeds:

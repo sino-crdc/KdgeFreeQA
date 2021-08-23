@@ -14,8 +14,8 @@ model_cfg = {
 train_cfg = {
     'bqak_train_path': None,
     'bqak_test_path': None,
-    'cqa_train_path': r'/data/wangzekun/KQA/question_answer_background/question-answer-train.json',
-    'cqa_test_path': r'/data/wangzekun/KQA/question_answer_background/question-answer-test.json',
+    'cqa_train_path': r'/data/wangzekun/KQA/question_answer_background/question_answer_background_train.json',
+    'cqa_test_path': r'/data/wangzekun/KQA/question_answer_background/question_answer_background_test.json',
     'tokenized_train_path': None,
     'vocab_char_path': None,
     'vector_char_path': None,
@@ -38,6 +38,7 @@ train_cfg = {
     'max_length': 512,
     'batch_first': True,
     'glove_dim': 100,
+    'num_epochs': 100,
     'tokenizer': 'ltp',  # 'ltp', 'jieba'
     'init_tokenizer_by_own_vocab': False,
     'is_train_tokenized': False,

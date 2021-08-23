@@ -18,8 +18,22 @@ class LatentQA(nn.Module):
         self.selector = Selector(idx2word, word2idx, self.config['latent_dim'], self.config['num_dist_word_selected'], self.config['temperature_initial'], self.config['mode'], batch_first)
 
 
-    # cases and questions in vector form.
     def forward(self, cases, questions, lengths_case, lengths_question, cases_pad_mask, questions_pad_mask, examples, num_step):
+        """
+        forward propagation pipeline.
+        :param cases: in vector form
+        :param questions: in vector form
+        :param lengths_case
+        :param lengths_question
+        :param cases_pad_mask
+        :param questions_pad_mask
+        :param examples: in string form
+        :param num_step
+        :return: probs: [bsz, s_len, vocab_size], then we can use this to generate answer! (either in a greedy way or in a beam search way)
+        :return: h: [bsz, s_len, latent_dim]
+        :return: v: [bsz, s_len, 2xencoder_hidden_dim + 2xencoder_hidden_dim + decoder_hidden_dim + embedding_dim]
+        :return: h_dist, distribution of latent representation
+        """
         print('encode')
         encoded_cases, encoded_questions = self.encoder(cases, questions)
         print('decode')
@@ -30,8 +44,8 @@ class LatentQA(nn.Module):
         context_c = context_vector(att_c, encoded_cases)
         context_q = context_vector(att_q, encoded_questions)
         print('stochastic selector network')
-        probs = self.selector.forward(torch.cat([cases, questions], dim=1), att_c, att_q, context_c, context_q, decoded, examples, num_step)
-        return probs
+        probs, h, v, h_dist, att_c, att_q, vocab_dist = self.selector.forward(torch.cat([cases, questions], dim=1), att_c, att_q, context_c, context_q, decoded, examples, num_step)
+        return probs, h, v, h_dist, att_c, att_q, vocab_dist
 
 
 # """
